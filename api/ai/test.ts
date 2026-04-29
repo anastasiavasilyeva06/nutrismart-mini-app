@@ -15,7 +15,9 @@ export default async function handler(req: any, res: any) {
         : "Say hello in Russian in one sentence.";
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Many new Gemini Developer API keys no longer have access to older 1.5 model IDs.
+    // "gemini-flash-latest" is the safest default alias for fast text generation.
+    const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL ?? "gemini-flash-latest" });
     const result = await model.generateContent(prompt);
 
     res.status(200).json({ ok: true, prompt, text: result.response.text() });
